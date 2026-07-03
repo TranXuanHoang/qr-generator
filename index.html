@@ -2687,32 +2687,68 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     }
 
     .empty-icon { font-size: 3rem; margin-bottom: 12px; }
+
+    /* Language switcher */
+    .lang-switcher {
+      display: flex;
+      gap: 4px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .lang-btn {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 5px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .lang-btn:not(.active):hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
   </style>
 </head>
 <body>
   <header>
-    <h1>QR Code Generator</h1>
-    <p>Generate QR codes from URLs — 100% in your browser</p>
-    <span class="badge">✓ Free &amp; valid forever — no accounts, no expiry</span>
+    <h1 data-i18n="title">QR Code Generator</h1>
+    <p data-i18n="subtitle">Generate QR codes from URLs — 100% in your browser</p>
+    <span class="badge" data-i18n="badge">✓ Free &amp; valid forever — no accounts, no expiry</span>
+    <div class="lang-switcher">
+      <button class="lang-btn active" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="ja" onclick="setLang('ja')">日本語</button>
+      <button class="lang-btn" data-lang="vi" onclick="setLang('vi')">Tiếng Việt</button>
+    </div>
   </header>
 
   <div class="container">
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('single')">Single QR Code</button>
-      <button class="tab-btn" onclick="switchTab('batch')">Batch QR Codes</button>
+      <button class="tab-btn active" onclick="switchTab('single')" data-i18n="tabSingle">Single QR Code</button>
+      <button class="tab-btn" onclick="switchTab('batch')" data-i18n="tabBatch">Batch QR Codes</button>
     </div>
 
     <!-- Single Tab -->
     <div id="tab-single" class="tab-panel active">
       <div class="card">
-        <label for="single-url">URL</label>
+        <label for="single-url" data-i18n="labelUrl">URL</label>
         <input type="url" id="single-url" placeholder="https://example.com"
                oninput="clearSingleError()" onkeydown="if(event.key==='Enter') generateSingle()" />
         <p class="error-msg" id="single-error"></p>
 
         <div class="options-row">
           <div class="option-group">
-            <label for="single-size">Size (px)</label>
+            <label for="single-size" data-i18n="labelSize">Size (px)</label>
             <select id="single-size">
               <option value="128">128 × 128</option>
               <option value="200">200 × 200</option>
@@ -2722,12 +2758,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             </select>
           </div>
           <div class="option-group">
-            <label for="single-ecl">Error Correction</label>
+            <label for="single-ecl" data-i18n="labelEcl">Error Correction</label>
             <select id="single-ecl">
-              <option value="L">L – Low (7%)</option>
-              <option value="M" selected>M – Medium (15%)</option>
-              <option value="Q">Q – Quartile (25%)</option>
-              <option value="H">H – High (30%)</option>
+              <option value="L" data-i18n="eclL">L – Low (7%)</option>
+              <option value="M" selected data-i18n="eclM">M – Medium (15%)</option>
+              <option value="Q" data-i18n="eclQ">Q – Quartile (25%)</option>
+              <option value="H" data-i18n="eclH">H – High (30%)</option>
             </select>
           </div>
         </div>
@@ -2735,17 +2771,17 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         <div class="color-row" style="margin-bottom:16px;">
           <div class="color-group">
             <input type="color" id="single-dark" value="#000000" />
-            <label for="single-dark">Dark color</label>
+            <label for="single-dark" data-i18n="darkColor">Dark color</label>
           </div>
           <div class="color-group">
             <input type="color" id="single-light" value="#ffffff" />
-            <label for="single-light">Light color</label>
+            <label for="single-light" data-i18n="lightColor">Light color</label>
           </div>
         </div>
 
         <button class="btn btn-primary" onclick="generateSingle()">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Generate QR Code
+          <span data-i18n="btnGenerate">Generate QR Code</span>
         </button>
 
         <div class="qr-result" id="single-result">
@@ -2754,12 +2790,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           </div>
           <p class="qr-label-text" id="single-url-display"></p>
           <div class="download-row">
-            <button class="btn btn-secondary" onclick="downloadSingle('png')">
-              ↓ Download PNG
-            </button>
-            <button class="btn btn-secondary" onclick="downloadSingle('svg')">
-              ↓ Download SVG
-            </button>
+            <button class="btn btn-secondary" onclick="downloadSingle('png')" data-i18n="btnDownloadPng">↓ Download PNG</button>
+            <button class="btn btn-secondary" onclick="downloadSingle('svg')" data-i18n="btnDownloadSvg">↓ Download SVG</button>
           </div>
         </div>
       </div>
@@ -2769,8 +2801,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     <div id="tab-batch" class="tab-panel">
       <div class="card">
         <div class="section-header">
-          <span class="section-title">URL List</span>
-          <button class="btn btn-secondary btn-sm" onclick="addEntry()">+ Add Row</button>
+          <span class="section-title" data-i18n="sectionUrlList">URL List</span>
+          <button class="btn btn-secondary btn-sm" onclick="addEntry()" data-i18n="btnAddRow">+ Add Row</button>
         </div>
 
         <div class="url-entries" id="url-entries">
@@ -2779,7 +2811,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
         <div class="options-row">
           <div class="option-group">
-            <label for="batch-size">Size (px)</label>
+            <label for="batch-size" data-i18n="labelSize">Size (px)</label>
             <select id="batch-size">
               <option value="128">128 × 128</option>
               <option value="200" selected>200 × 200</option>
@@ -2788,12 +2820,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
             </select>
           </div>
           <div class="option-group">
-            <label for="batch-ecl">Error Correction</label>
+            <label for="batch-ecl" data-i18n="labelEcl">Error Correction</label>
             <select id="batch-ecl">
-              <option value="L">L – Low</option>
-              <option value="M" selected>M – Medium</option>
-              <option value="Q">Q – Quartile</option>
-              <option value="H">H – High</option>
+              <option value="L" data-i18n="eclLShort">L – Low</option>
+              <option value="M" selected data-i18n="eclMShort">M – Medium</option>
+              <option value="Q" data-i18n="eclQShort">Q – Quartile</option>
+              <option value="H" data-i18n="eclHShort">H – High</option>
             </select>
           </div>
         </div>
@@ -2801,11 +2833,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         <div class="color-row" style="margin-bottom:16px;">
           <div class="color-group">
             <input type="color" id="batch-dark" value="#000000" />
-            <label for="batch-dark">Dark color</label>
+            <label for="batch-dark" data-i18n="darkColor">Dark color</label>
           </div>
           <div class="color-group">
             <input type="color" id="batch-light" value="#ffffff" />
-            <label for="batch-light">Light color</label>
+            <label for="batch-light" data-i18n="lightColor">Light color</label>
           </div>
         </div>
 
@@ -2814,7 +2846,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         <div class="action-row">
           <button class="btn btn-primary" onclick="generateBatch()">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-            Generate All
+            <span data-i18n="btnGenerateAll">Generate All</span>
           </button>
         </div>
 
@@ -2823,8 +2855,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           <div class="section-header">
             <span class="section-title" id="batch-count-label">QR Codes</span>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
-              <button class="btn btn-secondary btn-sm" onclick="downloadAllZip('png')">↓ All as PNG (ZIP)</button>
-              <button class="btn btn-secondary btn-sm" onclick="downloadAllZip('svg')">↓ All as SVG (ZIP)</button>
+              <button class="btn btn-secondary btn-sm" onclick="downloadAllZip('png')" data-i18n="btnAllPng">↓ All as PNG (ZIP)</button>
+              <button class="btn btn-secondary btn-sm" onclick="downloadAllZip('svg')" data-i18n="btnAllSvg">↓ All as SVG (ZIP)</button>
             </div>
           </div>
           <div class="qr-grid" id="qr-grid"></div>
@@ -2834,6 +2866,139 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   </div>
 
   <script>
+    // ── i18n ──────────────────────────────────────────────────────────────────
+
+    const TRANSLATIONS = {
+      en: {
+        title: 'QR Code Generator',
+        subtitle: 'Generate QR codes from URLs — 100% in your browser',
+        badge: '✓ Free & valid forever — no accounts, no expiry',
+        tabSingle: 'Single QR Code',
+        tabBatch: 'Batch QR Codes',
+        labelUrl: 'URL',
+        labelSize: 'Size (px)',
+        labelEcl: 'Error Correction',
+        eclL: 'L – Low (7%)',
+        eclM: 'M – Medium (15%)',
+        eclQ: 'Q – Quartile (25%)',
+        eclH: 'H – High (30%)',
+        eclLShort: 'L – Low',
+        eclMShort: 'M – Medium',
+        eclQShort: 'Q – Quartile',
+        eclHShort: 'H – High',
+        darkColor: 'Dark color',
+        lightColor: 'Light color',
+        btnGenerate: 'Generate QR Code',
+        btnDownloadPng: '↓ Download PNG',
+        btnDownloadSvg: '↓ Download SVG',
+        sectionUrlList: 'URL List',
+        btnAddRow: '+ Add Row',
+        btnGenerateAll: 'Generate All',
+        btnAllPng: '↓ All as PNG (ZIP)',
+        btnAllSvg: '↓ All as SVG (ZIP)',
+        errEmpty: 'Please enter a URL.',
+        errInvalid: 'Invalid URL — must start with http:// or https://',
+        errBatchInvalid: 'Some URLs are invalid — please fix the highlighted fields.',
+        errBatchEmpty: 'Add at least one URL.',
+        placeholderLabel: 'Label (e.g. Homepage)',
+        placeholderUrl: 'https://example.com',
+        qrCodes: 'QR Codes',
+      },
+      ja: {
+        title: 'QRコード ジェネレーター',
+        subtitle: 'URLからQRコードを生成 — すべてブラウザ内で完結',
+        badge: '✓ 無料・無期限 — アカウント不要、有効期限なし',
+        tabSingle: '単一QRコード',
+        tabBatch: '一括QRコード',
+        labelUrl: 'URL',
+        labelSize: 'サイズ (px)',
+        labelEcl: '誤り訂正レベル',
+        eclL: 'L – 低 (7%)',
+        eclM: 'M – 中 (15%)',
+        eclQ: 'Q – 高め (25%)',
+        eclH: 'H – 最高 (30%)',
+        eclLShort: 'L – 低',
+        eclMShort: 'M – 中',
+        eclQShort: 'Q – 高め',
+        eclHShort: 'H – 最高',
+        darkColor: 'ダーク色',
+        lightColor: 'ライト色',
+        btnGenerate: 'QRコードを生成',
+        btnDownloadPng: '↓ PNGをダウンロード',
+        btnDownloadSvg: '↓ SVGをダウンロード',
+        sectionUrlList: 'URLリスト',
+        btnAddRow: '+ 行を追加',
+        btnGenerateAll: 'すべて生成',
+        btnAllPng: '↓ すべてPNG (ZIP)',
+        btnAllSvg: '↓ すべてSVG (ZIP)',
+        errEmpty: 'URLを入力してください。',
+        errInvalid: '無効なURL — http:// または https:// で始める必要があります',
+        errBatchInvalid: '無効なURLがあります — 赤く表示されているフィールドを修正してください。',
+        errBatchEmpty: '少なくとも1つのURLを追加してください。',
+        placeholderLabel: 'ラベル（例：ホームページ）',
+        placeholderUrl: 'https://example.com',
+        qrCodes: 'QRコード',
+      },
+      vi: {
+        title: 'Tạo Mã QR',
+        subtitle: 'Tạo mã QR từ URL — 100% trên trình duyệt của bạn',
+        badge: '✓ Miễn phí & hiệu lực mãi mãi — không cần tài khoản, không hết hạn',
+        tabSingle: 'Một Mã QR',
+        tabBatch: 'Nhiều Mã QR',
+        labelUrl: 'URL',
+        labelSize: 'Kích thước (px)',
+        labelEcl: 'Mức sửa lỗi',
+        eclL: 'L – Thấp (7%)',
+        eclM: 'M – Trung bình (15%)',
+        eclQ: 'Q – Cao (25%)',
+        eclH: 'H – Rất cao (30%)',
+        eclLShort: 'L – Thấp',
+        eclMShort: 'M – Trung bình',
+        eclQShort: 'Q – Cao',
+        eclHShort: 'H – Rất cao',
+        darkColor: 'Màu tối',
+        lightColor: 'Màu sáng',
+        btnGenerate: 'Tạo Mã QR',
+        btnDownloadPng: '↓ Tải về PNG',
+        btnDownloadSvg: '↓ Tải về SVG',
+        sectionUrlList: 'Danh sách URL',
+        btnAddRow: '+ Thêm dòng',
+        btnGenerateAll: 'Tạo tất cả',
+        btnAllPng: '↓ Tất cả PNG (ZIP)',
+        btnAllSvg: '↓ Tất cả SVG (ZIP)',
+        errEmpty: 'Vui lòng nhập một URL.',
+        errInvalid: 'URL không hợp lệ — phải bắt đầu bằng http:// hoặc https://',
+        errBatchInvalid: 'Một số URL không hợp lệ — vui lòng sửa các trường được tô đỏ.',
+        errBatchEmpty: 'Thêm ít nhất một URL.',
+        placeholderLabel: 'Nhãn (vd: Trang chủ)',
+        placeholderUrl: 'https://example.com',
+        qrCodes: 'Mã QR',
+      },
+    };
+
+    let currentLang = localStorage.getItem('qrLang') || 'en';
+
+    function t(key) {
+      return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key])
+        || TRANSLATIONS.en[key] || key;
+    }
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('qrLang', lang);
+      document.documentElement.lang = lang;
+      document.title = TRANSLATIONS[lang].title;
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+      });
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.dataset.i18n);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.dataset.i18nPlaceholder);
+      });
+    }
+
     // ── helpers ──────────────────────────────────────────────────────────────
 
     function isValidUrl(str) {
@@ -2933,12 +3098,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       const resultEl = document.getElementById('single-result');
 
       if (!raw) {
-        errEl.textContent = 'Please enter a URL.';
+        errEl.textContent = t('errEmpty');
         urlInput.classList.add('invalid');
         return;
       }
       if (!isValidUrl(raw)) {
-        errEl.textContent = 'Invalid URL — must start with http:// or https://';
+        errEl.textContent = t('errInvalid');
         urlInput.classList.add('invalid');
         resultEl.classList.remove('show');
         return;
@@ -2979,7 +3144,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     // ── batch rows ────────────────────────────────────────────────────────────
 
     let rowId = 0;
-    const batchData = []; // [{label, url, canvas, svg}]
+    const batchData = [];
 
     function addEntry(label = '', url = '') {
       const id = rowId++;
@@ -2988,8 +3153,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       row.className = 'url-entry';
       row.id = 'row-' + id;
       row.innerHTML = `
-        <input type="text" placeholder="Label (e.g. Homepage)" value="${escHtml(label)}" />
-        <input type="url"  placeholder="https://example.com"   value="${escHtml(url)}" />
+        <input type="text" data-i18n-placeholder="placeholderLabel" placeholder="${escHtml(t('placeholderLabel'))}" value="${escHtml(label)}" />
+        <input type="url"  data-i18n-placeholder="placeholderUrl"   placeholder="${escHtml(t('placeholderUrl'))}"   value="${escHtml(url)}" />
         <button class="btn btn-danger btn-sm" onclick="removeEntry('row-${id}')">✕</button>
       `;
       container.appendChild(row);
@@ -3018,7 +3183,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         const url   = inputs[1].value.trim();
         inputs[1].classList.remove('invalid', 'valid');
 
-        if (!url) return; // skip empty rows silently
+        if (!url) return;
 
         if (!isValidUrl(url)) {
           inputs[1].classList.add('invalid');
@@ -3030,11 +3195,11 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       });
 
       if (hasError) {
-        errEl.textContent = 'Some URLs are invalid — please fix the highlighted fields.';
+        errEl.textContent = t('errBatchInvalid');
         return;
       }
       if (entries.length === 0) {
-        errEl.textContent = 'Add at least one URL.';
+        errEl.textContent = t('errBatchEmpty');
         return;
       }
 
@@ -3071,7 +3236,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       }
 
       document.getElementById('batch-count-label').textContent =
-        entries.length + ' QR Code' + (entries.length !== 1 ? 's' : '');
+        entries.length + ' ' + t('qrCodes');
       document.getElementById('batch-results-wrap').style.display = 'block';
     }
 
@@ -3107,6 +3272,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
     // ── init ──────────────────────────────────────────────────────────────────
 
+    setLang(currentLang);
     addEntry('Homepage', 'https://example.com');
     addEntry('Docs', 'https://docs.example.com');
   </script>
